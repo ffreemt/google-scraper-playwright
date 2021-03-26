@@ -15,6 +15,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       # - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
       - uses: microsoft/playwright-github-action@v1
       - uses: actions/setup-python@v2
         with:
