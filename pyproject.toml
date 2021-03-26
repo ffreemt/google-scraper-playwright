@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "google-scraper-pw"
+version = "0.1.0"
+description = "scrape google via playwright"
+authors = ["freemt"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/ffreemt/google-scraper-playwright"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+linetimer = "^0.1.4"
+pyquery = "^1.4.3"
+logzero = "^1.6.3"
+get-pwbrowser = {git = "https://github.com/ffreemt/get-pwbrowser.git"}
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+tbump = "^6.3.1"
+ipython = "^7.21.0"
+flake8 = "^3.8.4"
+pytest-asyncio = "^0.14.0"
+psutil = "^5.8.0"
+pylint = "^2.7.2"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

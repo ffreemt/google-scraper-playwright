@@ -1,0 +1,16 @@
+{
+  "name": "google-scraper-playwright",
+  "version": "0.1.0",
+  "description": "google scraper pw",
+  "main": "index.js",
+  "repository": "git@github.com:ffreemt/google-scraper-playwright.git",
+  "author": "freemt",
+  "license": "MIT",
+  "scripts": {
+    "pyright": "nodemon -w google_scraper_pw -w tests -w .venv -e .py -x pyright google_scraper_pw tests",
+    "pytest": "nodemon -w tests -w google_scraper_pw -e .py -x pytest tests",
+    "black": "nodemon  -w tests -w google_scraper_pw -e .py -x \"black tests google_scraper_pw && python -m flake8\"",
+    "pylint": "nodemon -w google_scraper_pw -e .py -x pylint google_scraper_pw",
+    "test:google_tr": "nodemon -w tests -e .py -x pytest -k google_tr tests"
+  }
+}

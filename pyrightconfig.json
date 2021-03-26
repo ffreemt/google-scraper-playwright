@@ -1,0 +1,11 @@
+{
+  "include": ["tests", "google_scraper_pw"],
+  "venvPath": ".venv/Scripts",
+  "reportTypeshedErrors": false,
+  "reportMissingImports": true,
+  "reportMissingTypeStubs": false,
+
+  "pythonVersion": "3.7",
+
+	"ignore": []
+}
