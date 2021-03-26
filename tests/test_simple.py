@@ -6,6 +6,7 @@ from google_scraper_pw.google_tr import google_tr
 
 # from get_ppbrowser.get_ppbrowser import get_ppbrowser
 from get_pwbrowser import get_pwbrowser
+from logzero import logger
 
 
 @pytest.mark.asyncio

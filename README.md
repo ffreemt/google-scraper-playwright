@@ -18,7 +18,8 @@ python -m playwrigh install chromium
 ```
 or
 ```bash
-pip install git+https://github.com/ffreemt/google-scraper-pw.git
+pip install git+https://github.com/ffreemt/google-scraper-playwright.git
+python -m playwrigh install chromium
 ```
 
 or clone the repo (``git clone https://github.com/ffreemt/google-scraper-plawright.git``) and install from it and
@@ -38,14 +39,39 @@ from google_scraper_pw.google_tr import google_tr
 
 res = await google_tr("test me")
 print(res)
-# '考我 试探我 测试我 试探'
+# '考验我'  # took 13.8s
+```
+13s is a long time. To speed up: prepare a page first.
 
-print(await google_tr("test me", to_lang="de"))
-# mich testen mich prüfen testen Sie mich
+```
+from get_pwbrowser import get_pwbrowser
+browser = await get_pwbrowser()
+page = await browser.new_page()
+from_lang = "auto"
+to_lang = "zh"
+url = f"https://translate.google.cn/?sl={from_lang}&tl={to_lang}&op=translate"
+await page.goto(url)
+res = await google_tr("test me", page=page)
+print(res)
+# '考验我'  # took 2.8s, much better
+
+print(await google_tr("test you", to_lang="de", page=page))
+# teste mich
+
+print(await google_tr("test you", to_lang="de", page=page))
+# teste dich  # took: 2.8s
+
+# format is preserved
+from pprint import pprint
+
+pprint(await google_tr("test you\n\n test me", to_lang="de", page=page))
+#'teste dich\n\n  teste mich'
 
 text = "Playwright is a Python library to automate Chromium, Firefox and WebKit browsers with a single API. Playwright delivers automation that is ever-green, capable, reliable and fast. "
-print(await google_tr(text, to_lang="zh"))
-# Pyppeteer的API与puppeteer几乎相同。更多的API在文档中列出。
+
+print(await google_tr(text, to_lang="de", page=page))
+
+# Playwright ist eine Python-Bibliothek, um Chrom-, Firefox- und Webkit-Browser mit einer einzigen API zu automatisieren. Der Dramatiker liefert Automatisierung, die jemals grün, fähig, zuverlässig und schnell ist.
 ```
 
 ## in `python`
@@ -54,27 +80,29 @@ print(await google_tr(text, to_lang="zh"))
 import asyncio
 from google_scraper_pw.google_tr import google_tr
 
+from get_pwbrowser import get_pwbrowser
+browser = await get_pwbrowser()
+page = await browser.new_page()
+from_lang = "auto"
+to_lang = "zh"
+url = f"https://translate.google.cn/?sl={from_lang}&tl={to_lang}&op=translate"
+await page.goto(url)
+
 async def main():
     text1 = "test me"
-    text2 = "Pyppeteer has almost same API as puppeteer. More APIs are listed in the document"
+    text2 = "Playwright is a Python library to automate Chromium, Firefox and WebKit browsers with a single API."
 
-    coros = [google_tr(elm) for elm in [text1, text2]]
+    coros = [google_tr(elm, page=page) for elm in [text1, text2]]
     res = await asyncio.gather(*coros, return_exceptions=True)
     print(res)
 
-loop = asyncio.get_event_loop()
-try:
-    loop.run_until_complete(main())
-finally:
-    loop.close()
+asyncio.run(main())
 
-# output: ['考我 试探我 测试我 试探', 'Pyppeteer的API与puppeteer几乎相同。更多的API在文档中列出']
+# output: ['测试MeplayWright是一个Python库，用于自动化Chromium，Firefox和WebKit浏览器，单个API。', '
+测试MeplayWright是一个Python库，用于自动化Chromium，Firefox和WebKit浏览器，单个API。']
 
 ```
 
-## Disclaimer
-
-The pypi is beta and will likely remain beta -- use it at your own peril.
 
 <!---
 
