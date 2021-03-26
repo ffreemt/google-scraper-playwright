@@ -26,6 +26,7 @@ jobs:
           poetry-version: ${{ matrix.poetry-version }}
       - name: Install packages
         run: |
+          python -m pip install playwright
           poetry install  # --no-dev
           python -m playwright install
       - name: Run flake8-pytest
