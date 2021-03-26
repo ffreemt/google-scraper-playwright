@@ -13,6 +13,7 @@ linetimer = "^0.1.4"
 pyquery = "^1.4.3"
 logzero = "^1.6.3"
 get-pwbrowser = {git = "https://github.com/ffreemt/get-pwbrowser.git"}
+playwright = "^1.10.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
