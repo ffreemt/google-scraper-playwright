@@ -9,30 +9,29 @@ os.environ['PYTHONPATH'] = Path(r"../get-pwbrowser")
 
 from typing import Optional, Union
 
-from time import sleep
+import asyncio
 import re
 
 # from urllib.parse import quote
 import html
 
 # from pyquery import PyQuery as pq
-# from playwright.async_api import async_playwright, Page
-from playwright.sync_api import Page
+from playwright.async_api import Page
 
 import logzero
 from logzero import logger
 from linetimer import CodeTimer
 
-from get_pwbrowser import get_pwbrowser
-from google_scraper_pw.get_page_pw import PAGE
+# from get_ppbrowser.get_ppbrowser import get_ppbrowser
+from google_scraper_pw import PAGE
 
 
 # fmt: off
-def google_tr(
+async def google_tr_async(
         text: str,
         from_lang: Optional[str] = "auto",
         to_lang: str = "zh",
-        page: Optional[Page] = PAGE,
+        page: Optional[Page] = None,
         verbose: Union[bool, int] = False,
         timeout: float = 5,
 ):
@@ -88,32 +87,32 @@ def google_tr(
     logger.debug(" Entry ")
 
     # if page is not supplied, get one, TODO use get_pwbrowser
-    if not isinstance(page, Page):
+    if page is None:
         page = PAGE
 
     try:
-        google_tr.from_lang
+        google_tr_async.from_lang
     except AttributeError:
-        google_tr.from_lang = "auto"
+        google_tr_async.from_lang = "auto"
     try:
-        google_tr.to_lang
+        google_tr_async.to_lang
     except AttributeError:
-        google_tr.to_lang = "zh-CN"
+        google_tr_async.to_lang = "zh-CN"
 
     url = ""
-    if (from_lang, to_lang) != (google_tr.from_lang, google_tr.to_lang):
+    if (from_lang, to_lang) != (google_tr_async.from_lang, google_tr_async.to_lang):
         url = f"https://translate.google.cn/?sl={from_lang}&tl={to_lang}&op=translate"
 
         logger.debug(" lang pair changed")
 
         try:
-            page.goto(url, timeout=45 * 1000)
+            await page.goto(url, timeout=45 * 1000)
         except Exception as exc:
             logger.error(exc)
             raise
 
     try:
-        textarea = page.wait_for_selector('//textarea', timeout=45 * 1000)
+        textarea = await page.wait_for_selector('//textarea', timeout=45 * 1000)
     except Exception as exc:
         logger.error(exc)
         raise
@@ -139,11 +138,11 @@ def google_tr(
             timeout = n_lines * 0.4
         timeout = timeout * 1000  # convert to ms
         try:
-            textarea.fill('', timeout=timeout)
-            sleep(0.1)
-            textarea.fill('', timeout=timeout)
-            sleep(0.1)
-            textarea.fill(text, timeout=timeout)
+            await textarea.fill('', timeout=timeout)
+            await asyncio.sleep(0.1)
+            await textarea.fill('', timeout=timeout)
+            await asyncio.sleep(0.1)
+            await textarea.fill(text, timeout=timeout)
         except Exception as exc:
             logger.error(exc)
             raise
@@ -153,7 +152,7 @@ def google_tr(
         ulimit = 3 / 0.1
         while not flag and idx < ulimit:
             idx += 1
-            content = page.content()
+            content = await page.content()
             # doc = pq(content)
 
             # flag = re.findall(r'data-text="[^"]+', doc.html())
@@ -161,11 +160,11 @@ def google_tr(
             logger.debug(flag)
             if flag:
                 break
-            sleep(0.1)
+            await asyncio.sleep(0.1)
         logger.debug("loop: %s", idx)
 
-        sleep(0.1)
-        content = page.content()
+        await asyncio.sleep(0.1)
+        content = await page.content()
         # doc = pq(content)
 
         try:
@@ -177,26 +176,26 @@ def google_tr(
         res = html.unescape(res)
         logger.debug(res)
 
-    if (from_lang, to_lang) != (google_tr.from_lang, google_tr.to_lang):
+    if (from_lang, to_lang) != (google_tr_async.from_lang, google_tr_async.to_lang):
         logger.debug("url=%s", url)
         logger.debug("page.url=%s", page.url)
         logger.debug("%s, %s", url == page.url, re.findall(rf"tl={to_lang}", page.url))
         if not re.findall(rf"tl={to_lang}", page.url):
-            logger.warning(" target lang [%s] does not appear to be a valid language, falled back to the previous tl [%s]", to_lang, google_tr.to_lang)
+            logger.warning(" target lang [%s] does not appear to be a valid language, falled back to the previous tl [%s]", to_lang, google_tr_async.to_lang)
         else:
-            google_tr.from_lang, google_tr.to_lang = from_lang, to_lang
+            google_tr_async.from_lang, google_tr_async.to_lang = from_lang, to_lang
 
     logger.debug(" Fini ")
 
     return res
 
 
-def main(page):
+async def main(page):
     """Main."""
     import sys
 
     text = "test this and that and more"
-    res = google_tr(text, page=page)
+    res = await google_tr_async(text, page=page)
     logger.info("%s, %s,", text, res)
 
     if len(sys.argv) > 1:
@@ -204,22 +203,33 @@ def main(page):
     else:
         text = "test this and that"
 
-    res = google_tr(text)
+    res = await google_tr_async(text)
     logger.info("%s, %s,", text, res)
 
 
 if __name__ == "__main__":
-    browser = get_pwbrowser()
-    # browser = get_pwbrowser(headless=False)
-    page = browser.new_page()
+    from get_pwbrowser import get_pwbrowser
+
+    try:
+        loop = asyncio.get_event_loop()
+    except Exception as exc:
+        logger.error(exc)
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+
+    browser = loop.run_until_complete(get_pwbrowser())
+    # browser = await get_pwbrowser(headless=False)
+    page = loop.run_until_complete(browser.new_page())
 
     from_lang = "auto"
     to_lang = "zh"
     url = f"https://translate.google.cn/?sl={from_lang}&tl={to_lang}&op=translate"
 
-    _ = page.goto(url, timeout=45 * 1000)
+    _ = loop.run_until_complete(page.goto(url, timeout=45 * 1000))
 
     try:
-        main(page)
+        loop.run_until_complete(main(page))
     except Exception as exc:
         logger.error(exc)
+    finally:
+        loop.close()

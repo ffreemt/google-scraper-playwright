@@ -118,25 +118,18 @@ pyflakes = ">=2.3.0,<2.4.0"
 
 [[package]]
 name = "get-pwbrowser"
-version = "0.1.0"
+version = "0.1.1"
 description = "instantiate a playwright chromium browser"
 category = "main"
 optional = false
-python-versions = "^3.7"
-develop = false
+python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
-logzero = "^1.6.3"
-playwright = "^1.9.2"
-pydantic = {version = "^1.8.1", extras = ["dotenv"]}
-pyquery = "^1.4.3"
-tbump = "^6.3.1"
-
-[package.source]
-type = "git"
-url = "https://github.com/ffreemt/get-pwbrowser.git"
-reference = "master"
-resolved_reference = "0b9eff1c3b3ef2b441623dd0a21b794b00300bf1"
+logzero = ">=1.6.3,<2.0.0"
+playwright = ">=1.9.2,<2.0.0"
+pydantic = {version = ">=1.8.1,<2.0.0", extras = ["dotenv"]}
+pyquery = ">=1.4.3,<2.0.0"
+tbump = ">=6.3.1,<7.0.0"
 
 [[package]]
 name = "greenlet"
@@ -652,7 +645,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "e9d14cd234c538547f43bf9514702599a307d00fcbf83228d6975c6a2b3347f1"
+content-hash = "48c4b6da4875df1198ab4e340fe34fba5eccd68ffcb4490d92b70aac4a59a41f"
 
 [metadata.files]
 appnope = [
@@ -702,7 +695,10 @@ flake8 = [
     {file = "flake8-3.9.0-py2.py3-none-any.whl", hash = "sha256:12d05ab02614b6aee8df7c36b97d1a3b2372761222b19b58621355e82acddcff"},
     {file = "flake8-3.9.0.tar.gz", hash = "sha256:78873e372b12b093da7b5e5ed302e8ad9e988b38b063b61ad937f26ca58fc5f0"},
 ]
-get-pwbrowser = []
+get-pwbrowser = [
+    {file = "get-pwbrowser-0.1.1.tar.gz", hash = "sha256:a3d4da5a5d9dbde4488485c5a3890be81f5ee3b55fd4f1601f2c528b48ac8cdd"},
+    {file = "get_pwbrowser-0.1.1-py3-none-any.whl", hash = "sha256:48b2a8a88f48cc1bbf6051f0b4b7ddb5e769b4eba0c1cd58f915af7214c1e81d"},
+]
 greenlet = [
     {file = "greenlet-1.0.0-cp27-cp27m-macosx_10_14_x86_64.whl", hash = "sha256:1d1d4473ecb1c1d31ce8fd8d91e4da1b1f64d425c1dc965edc4ed2a63cfa67b2"},
     {file = "greenlet-1.0.0-cp27-cp27m-manylinux1_x86_64.whl", hash = "sha256:cfd06e0f0cc8db2a854137bd79154b61ecd940dce96fad0cba23fe31de0b793c"},

@@ -32,4 +32,4 @@ jobs:
       - name: Run flake8-pytest
         run: |
           poetry run flake8 --exit-zero
-          poetry run pytest
+          poetry run pytest -k "test_version or google_tr"

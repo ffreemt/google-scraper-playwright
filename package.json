@@ -10,7 +10,9 @@
     "pyright": "nodemon -w google_scraper_pw -w tests -w .venv -e .py -x pyright google_scraper_pw tests",
     "pytest": "nodemon -w tests -w google_scraper_pw -e .py -x pytest tests",
     "black": "nodemon  -w tests -w google_scraper_pw -e .py -x \"black tests google_scraper_pw && python -m flake8\"",
-    "pylint": "nodemon -w google_scraper_pw -e .py -x pylint google_scraper_pw",
+    "pylint": "nodemon -w google_scraper_pw -e .py -x pylint -d duplicate-code google_scraper_pw",
+    "test": "nodemon -w tests -e .py -x pytest -k \"test_version or google_tr\" tests",
+    "test:version": "nodemon -w tests -e .py -x pytest -k test_version tests",
     "test:google_tr": "nodemon -w tests -e .py -x pytest -k google_tr tests"
   }
 }
