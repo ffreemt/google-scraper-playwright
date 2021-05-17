@@ -1,3 +1,4 @@
+"""Config pytest"""
 # import pytest
 # from get_pwbrowser import get_pwbrowser
 
