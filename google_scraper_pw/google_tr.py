@@ -74,7 +74,7 @@ def google_tr(
     if len(text) > _:  # 5250
         logger.warning("text too long, trimmed to %s", _)
         text = text[:_]
-        return text
+        # return text
 
     # set verbose=40 to turn most things off
     if isinstance(verbose, bool):
