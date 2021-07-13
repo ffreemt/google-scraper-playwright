@@ -1,4 +1,5 @@
 """Init."""
+__version__ = "0.1.0"
 from playwright.sync_api import sync_playwright
 from logzero import logger
 
@@ -10,9 +11,8 @@ from google_scraper_pw.google_tr import google_tr
 # PAGE, PLAYWRIGHT = get_page_pw()
 
 __all__ = [
-    # "google_tr",
+    "google_tr",
     # "google_tr_async",
     # "PAGE",
     # "PLAYWRIGHT",
 ]
-__version__ = "0.1.0"
